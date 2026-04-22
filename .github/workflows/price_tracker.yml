@@ -2,8 +2,8 @@ name: eMAG Price Tracker
 
 on:
   schedule:
-    - cron: '0 * * * *'  # runs every hour
-  workflow_dispatch:  # allows manual trigger from GitHub
+    - cron: '0 * * * *'
+  workflow_dispatch:
 
 jobs:
   track-price:
@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
