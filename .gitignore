@@ -1,1 +1,25 @@
+# Environment variables
 .env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+
+# Playwright
+test-results/
+playwright-report/
+
+# VS Code
+.vscode/
+
+# pytest
+.pytest_cache/
+
+# Virtual environment
+venv/
+.venv/
