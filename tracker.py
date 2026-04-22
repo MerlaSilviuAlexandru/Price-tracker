@@ -15,7 +15,8 @@ PRICE_HISTORY_FILE = "last_price.json"
 
 def get_prices():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        headless = os.getenv("GITHUB_ACTIONS") == "true"
+        browser = p.chromium.launch(headless=headless)
         page = browser.new_page()
         page.goto(PRODUCT_URL)
         page.wait_for_timeout(3000)
