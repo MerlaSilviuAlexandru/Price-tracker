@@ -11,6 +11,10 @@ PRODUCTS = [
     {
         "name": "Pampers Active Baby Pants Size 5 164buc",
         "url": "https://www.emag.ro/scutece-chilotel-pampers-active-baby-pants-xxl-box-marimea-5-11kg-17kg-164-buc-8006530315722/pd/DGPTK32BM/"
+    },
+    {
+        "name": "Huggies Pure Wet Wipes 10x56buc",
+        "url": "https://www.emag.ro/servetele-umede-huggies-pure-10-pachete-x-56-560-buc-5029054659571/pd/DX36XYBBM/"
     }
 ]
 
@@ -72,34 +76,28 @@ def check_deal(product, current_price, original_price, history):
     print(f"\n--- {product['name']} ---")
     print(f"Current price: {current_price} Lei")
 
-    if original_price is None:
-        print("No discount available on this product right now.")
-        history[product["name"]] = current_price
-        return
-
-    discount = ((original_price - current_price) / original_price) * 100
     last_price = history.get(product["name"])
-
-    print(f"Original price: {original_price} Lei")
-    print(f"Discount: {discount:.1f}%")
     print(f"Last known price: {last_price} Lei")
 
     if current_price != last_price:
         print("Price changed! Saving new price...")
         history[product["name"]] = current_price
-        if discount >= DISCOUNT_THRESHOLD:
-            message = (
-                f"🔥 DEAL FOUND on eMAG!\n"
-                f"Product: {product['name']}\n"
-                f"Original price: {original_price} Lei\n"
-                f"Current price: {current_price} Lei\n"
-                f"Discount: {discount:.1f}%\n"
-                f"Link: {product['url']}"
-            )
-            print(message)
-            send_telegram_message(message)
-        else:
-            print(f"Price changed but discount is only {discount:.1f}%. No notification sent.")
+
+        discount_text = ""
+        if original_price is not None and original_price > current_price:
+            discount = ((original_price - current_price) / original_price) * 100
+            discount_text = f"\nDiscount: {discount:.1f}%\nOriginal price: {original_price} Lei"
+
+        message = (
+            f"💰 Price change detected on eMAG!\n"
+            f"Product: {product['name']}\n"
+            f"Old price: {last_price} Lei\n"
+            f"New price: {current_price} Lei"
+            f"{discount_text}\n"
+            f"Link: {product['url']}"
+        )
+        print(message)
+        send_telegram_message(message)
     else:
         print("Price unchanged. No notification sent.")
 
