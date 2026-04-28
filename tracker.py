@@ -15,6 +15,10 @@ PRODUCTS = [
     {
         "name": "Huggies Pure Wet Wipes 10x56buc",
         "url": "https://www.emag.ro/servetele-umede-huggies-pure-10-pachete-x-56-560-buc-5029054659571/pd/DX36XYBBM/"
+    },
+    {
+        "name": "Braun ThermoScan 7 IRT6520B",
+        "url": "https://www.emag.ro/termometru-pentru-ureche-cu-infrarosu-braun-thermoscan-7-irt6520b-digital-negru-7irt6520b/pd/DVNQ83MBM/"
     }
 ]
 
