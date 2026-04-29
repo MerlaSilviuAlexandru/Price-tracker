@@ -1,4 +1,4 @@
-name: eMAG Price Tracker
+name: PriceTracker
 on:
   schedule:
     - cron: '0 * * * *'

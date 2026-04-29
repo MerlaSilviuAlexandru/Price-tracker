@@ -1,6 +1,6 @@
-# eMAG Price Tracker
+# PriceTracker
 
-A Python automation tool that monitors product prices on eMAG.ro and sends a Telegram notification whenever a price changes.
+A Python automation tool that monitors product prices across multiple e-commerce sites and sends a Telegram notification whenever a price changes.
 
 ## How it works
 
