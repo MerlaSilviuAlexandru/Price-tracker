@@ -60,4 +60,5 @@ jobs:
           git config user.email "github-actions@github.com"
           git add last_price.json
           git diff --cached --quiet || git commit -m "Update price history"
+          git pull --rebase
           git push
