@@ -1,15 +1,9 @@
 from utils import parse_price
+from pages.base_page import BasePage
 
 
-class EmagProductPage:
+class EmagProductPage(BasePage):
     site_name = "eMAG"
-
-    def __init__(self, page):
-        self.page = page
-
-    def open(self, url):
-        self.page.goto(url, timeout=60000)
-        self.page.wait_for_timeout(3000)
 
     def get_current_price(self):
         raw = self.page.locator("[data-test='main-price']").first.inner_text()
