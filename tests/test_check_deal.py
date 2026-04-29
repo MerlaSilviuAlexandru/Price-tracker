@@ -68,3 +68,25 @@ def test_notification_message_contains_old_and_new_price(mock_send):
     message = mock_send.call_args[0][0]
     assert "100.0" in message
     assert "80.0" in message
+
+
+@patch("tracker.send_telegram_message")
+def test_dry_run_skips_notification(mock_send):
+    history = {"Test Product": 100.0}
+    check_deal(PRODUCT, 80.0, None, SITE_NAME, history, dry_run=True)
+    mock_send.assert_not_called()
+
+
+@patch("tracker.send_telegram_message")
+def test_dry_run_does_not_update_history(mock_send):
+    history = {"Test Product": 100.0}
+    check_deal(PRODUCT, 80.0, None, SITE_NAME, history, dry_run=True)
+    assert history["Test Product"] == 100.0
+
+
+@patch("tracker.send_telegram_message")
+def test_notification_contains_site_name(mock_send):
+    history = {"Test Product": 100.0}
+    check_deal(PRODUCT, 80.0, None, "Altex", history)
+    message = mock_send.call_args[0][0]
+    assert "Altex" in message
