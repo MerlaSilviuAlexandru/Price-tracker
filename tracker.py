@@ -1,9 +1,11 @@
 import argparse
+import csv
 import logging
 import requests
 import json
 import os
 import time
+from datetime import datetime
 from playwright.sync_api import sync_playwright
 from dotenv import load_dotenv
 from pages.page_factory import get_page_for_url
@@ -25,6 +27,7 @@ with open(PRODUCTS_FILE, "r") as f:
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 PRICE_HISTORY_FILE = "last_price.json"
+PRICE_LOG_FILE = "price_history.csv"
 
 
 def get_prices(url, browser, retries=3):
@@ -66,6 +69,15 @@ def save_price_history(history):
         json.dump(history, f)
 
 
+def log_price_change(product_name, site_name, old_price, new_price):
+    file_exists = os.path.exists(PRICE_LOG_FILE)
+    with open(PRICE_LOG_FILE, "a", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        if not file_exists:
+            writer.writerow(["timestamp", "product", "site", "old_price", "new_price"])
+        writer.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), product_name, site_name, old_price, new_price])
+
+
 def check_deal(product, current_price, original_price, site_name, history, dry_run=False):
     logger.info(f"--- {product['name']} ---")
     logger.info(f"Current price: {current_price} Lei")
@@ -77,6 +89,7 @@ def check_deal(product, current_price, original_price, site_name, history, dry_r
         logger.info("First time seeing this product. Saving baseline price.")
         if not dry_run:
             history[product["name"]] = current_price
+            log_price_change(product["name"], site_name, None, current_price)
     elif current_price < last_price:
         discount_text = ""
         if original_price is not None and original_price > current_price:
@@ -97,11 +110,13 @@ def check_deal(product, current_price, original_price, site_name, history, dry_r
             logger.info("[DRY RUN] Telegram notification skipped.")
         else:
             history[product["name"]] = current_price
+            log_price_change(product["name"], site_name, last_price, current_price)
             send_telegram_message(message)
     elif current_price > last_price:
         logger.info(f"Price increased from {last_price} to {current_price} Lei. No notification sent.")
         if not dry_run:
             history[product["name"]] = current_price
+            log_price_change(product["name"], site_name, last_price, current_price)
     else:
         logger.info("Price unchanged. No notification sent.")
 
