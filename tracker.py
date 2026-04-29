@@ -7,20 +7,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-PRODUCTS = [
-    {
-        "name": "Pampers Active Baby Pants Size 5 164buc",
-        "url": "https://www.emag.ro/scutece-chilotel-pampers-active-baby-pants-xxl-box-marimea-5-11kg-17kg-164-buc-8006530315722/pd/DGPTK32BM/"
-    },
-    {
-        "name": "Huggies Pure Wet Wipes 10x56buc",
-        "url": "https://www.emag.ro/servetele-umede-huggies-pure-10-pachete-x-56-560-buc-5029054659571/pd/DX36XYBBM/"
-    },
-    {
-        "name": "Braun ThermoScan 7 IRT6520B",
-        "url": "https://www.emag.ro/termometru-pentru-ureche-cu-infrarosu-braun-thermoscan-7-irt6520b-digital-negru-7irt6520b/pd/DVNQ83MBM/"
-    }
-]
+PRODUCTS_FILE = "products.json"
+
+with open(PRODUCTS_FILE, "r") as f:
+    PRODUCTS = json.load(f)
 
 DISCOUNT_THRESHOLD = 30
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
