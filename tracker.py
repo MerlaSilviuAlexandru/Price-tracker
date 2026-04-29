@@ -5,7 +5,7 @@ import os
 import time
 from playwright.sync_api import sync_playwright
 from dotenv import load_dotenv
-from pages.emag_page import EmagProductPage
+from pages.page_factory import get_page_for_url
 
 load_dotenv()
 
@@ -31,10 +31,10 @@ def get_prices(url, retries=3):
             with sync_playwright() as p:
                 headless = os.getenv("GITHUB_ACTIONS") == "true"
                 browser = p.chromium.launch(headless=headless)
-                emag_page = EmagProductPage(browser.new_page())
-                emag_page.open(url)
-                current_price = emag_page.get_current_price()
-                original_price = emag_page.get_original_price(current_price)
+                product_page = get_page_for_url(url, browser.new_page())
+                product_page.open(url)
+                current_price = product_page.get_current_price()
+                original_price = product_page.get_original_price(current_price)
                 browser.close()
                 return current_price, original_price
 
