@@ -8,6 +8,7 @@ from pages.carrefour_page import CarrefourProductPage
 
 def test_emag_get_current_price():
     mock_page = MagicMock()
+    mock_page.locator.return_value.first.count.return_value = 1
     mock_page.locator.return_value.first.inner_text.return_value = "279,98 Lei"
     assert EmagProductPage(mock_page).get_current_price() == 279.98
 
