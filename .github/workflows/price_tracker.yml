@@ -48,6 +48,12 @@ jobs:
           playwright install firefox
           playwright install-deps firefox
 
+      - name: Start Tor
+        run: |
+          sudo apt-get install -y tor
+          sudo service tor start
+          sleep 5
+
       - name: Run price tracker
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}

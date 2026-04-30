@@ -1,3 +1,4 @@
+import os
 import re
 import requests
 from pages.base_page import BasePage
@@ -10,6 +11,12 @@ _HEADERS = {
     )
 }
 
+_PROXIES = (
+    {"http": "socks5://127.0.0.1:9050", "https": "socks5://127.0.0.1:9050"}
+    if os.getenv("CI")
+    else {}
+)
+
 
 class EmagProductPage(BasePage):
     site_name = "eMAG"
@@ -19,7 +26,7 @@ class EmagProductPage(BasePage):
         self._html = None
 
     def open(self, url):
-        response = requests.get(url, headers=_HEADERS, timeout=30)
+        response = requests.get(url, headers=_HEADERS, proxies=_PROXIES, timeout=30)
         response.raise_for_status()
         self._html = response.text
 
